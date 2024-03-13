@@ -1,0 +1,17 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Tags from '@/components/Tags.astro';
+import type { FrontMatter } from '@/types/Markdown';
+
+const posts = await Astro.glob<FrontMatter>('../posts/*.md');
+
+const tags = Array.from(
+  new Set(posts.map((post) => post.frontmatter.tags).flat())
+);
+
+const pageTitle = 'Tags';
+---
+
+<BaseLayout title={pageTitle}>
+  <Tags tags={tags} />
+</BaseLayout>

@@ -1,0 +1,40 @@
+---
+import type { MarkdownInstance } from 'astro';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import type { FrontMatter } from '@/types/Markdown';
+import BlogPost from '@/components/BlogPost.astro';
+
+type Params = { tag: string };
+type Props = { posts: Array<MarkdownInstance<FrontMatter>> };
+type StaticPath = Promise<
+  Array<{
+    params: Params;
+    props: Props;
+  }>
+>;
+
+export const getStaticPaths = async (): StaticPath => {
+  const posts = await Astro.glob<FrontMatter>('../posts/*.md');
+  const tags = new Set(posts.map(({ frontmatter: { tags } }) => tags).flat());
+  return Array.from(tags).map((tag) => {
+    const filtered = posts.filter(({ frontmatter: { tags } }) =>
+      tags.includes(tag)
+    );
+    return {
+      params: { tag },
+      props: { posts: filtered },
+    };
+  });
+};
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<BaseLayout title={tag}>
+  <p>Posts tagged with {tag}</p>
+  <ul>
+    {posts.map((props) => <BlogPost {...props} />)}
+  </ul>
+</BaseLayout>

@@ -1,0 +1,15 @@
+---
+import type { FrontMatter } from '@/types/Markdown';
+import type { MarkdownInstance } from 'astro';
+
+type Props = MarkdownInstance<FrontMatter>;
+
+const {
+  url,
+  frontmatter: { title },
+} = Astro.props;
+---
+
+<li>
+  <a href={url}>{title}</a>
+</li>
