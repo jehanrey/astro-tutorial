@@ -1,12 +1,14 @@
 ---
-import type { FrontMatter } from '@/types/Markdown';
-import type { MarkdownInstance } from 'astro';
+import type { CollectionEntry } from 'astro:content';
 
-type Props = MarkdownInstance<FrontMatter>;
+interface Props {
+  url: string;
+  data: CollectionEntry<'posts'>['data'];
+}
 
 const {
   url,
-  frontmatter: { title },
+  data: { title },
 } = Astro.props;
 ---
 
